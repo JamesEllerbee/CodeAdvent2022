@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class DayTwoTest {
-    private val exampleInputFilePath = "Day2ExampleInput.txt"
+    private val exampleInputFilePath = "day2/Day2ExampleInput.txt"
     private val fileUtility = FileUtility()
     private var dayTwo = DayTwo() { listOf() }
 
