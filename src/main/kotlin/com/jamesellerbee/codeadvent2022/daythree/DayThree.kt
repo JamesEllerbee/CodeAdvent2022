@@ -7,16 +7,23 @@ import com.jamesellerbee.codeadvent2022.utility.logging.Logger
 import com.jamesellerbee.codeadvent2022.utility.logging.LoggingLevel
 
 class DayThree(inputProvider: () -> List<String>) :
-    AdventDay("Day Three", inputProvider) {
+    AdventDay("Day Three", "Rucksack Reorganization", inputProvider) {
     private val lowerCaseOffset = 96
     private val upperCaseOffset = 38
 
-    private val logger by lazy {
-        DependencyInjector.resolve<Logger>(Logger::class.java)
+
+    override fun partOne() {
+        val expected = expectedAnswerProvider?.getExpectedAnswer("Day Three", "Part One") ?: "UNKNOWN"
+        val actual = findSumOfPriorities(inputProvider.invoke(),1)
+
+        printOutput(expected, actual.toString())
     }
 
-    private val expectedAnswerProvider by lazy {
-        DependencyInjector.resolve<ExpectedAnswerProvider>(ExpectedAnswerProvider::class.java)
+    override fun partTwo() {
+        val expected = expectedAnswerProvider?.getExpectedAnswer("Day Three", "Part Two") ?: "UNKNOWN"
+        val actual = findSumOfPriorities(inputProvider.invoke(),3)
+
+        printOutput(expected, actual.toString())
     }
 
     fun findCommonCharacter(groups: List<String>): Char {
@@ -72,21 +79,4 @@ class DayThree(inputProvider: () -> List<String>) :
 
         return sum
     }
-
-
-
-    override fun partOne() {
-        val expected = expectedAnswerProvider?.getExpectedAnswer("Day Three", "Part One") ?: "UNKNOWN"
-        val actual = findSumOfPriorities(inputProvider.invoke(),1)
-
-        printOutput(expected, actual.toString())
-    }
-
-    override fun partTwo() {
-        val expected = expectedAnswerProvider?.getExpectedAnswer("Day Three", "Part Two") ?: "UNKNOWN"
-        val actual = findSumOfPriorities(inputProvider.invoke(),3)
-
-        printOutput(expected, actual.toString())
-    }
-
 }

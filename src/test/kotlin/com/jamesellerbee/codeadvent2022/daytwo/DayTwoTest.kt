@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class DayTwoTest {
     private val exampleInputFilePath = "day2/Day2ExampleInput.txt"
     private val fileUtility = FileUtility()
-    private var dayTwo = DayTwo() { listOf() }
+    private var dayTwo = DayTwo() { emptyList() }
 
     @Test
     fun testProvidedExample1() {

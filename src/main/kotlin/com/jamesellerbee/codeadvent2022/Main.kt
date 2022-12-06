@@ -1,5 +1,7 @@
 package com.jamesellerbee.codeadvent2022
 
+import com.jamesellerbee.codeadvent2022.dayfive.DayFive
+import com.jamesellerbee.codeadvent2022.dayfour.DayFour
 import com.jamesellerbee.codeadvent2022.dayone.DayOne
 import com.jamesellerbee.codeadvent2022.daythree.DayThree
 import com.jamesellerbee.codeadvent2022.daytwo.DayTwo
@@ -19,7 +21,7 @@ fun main(args: Array<String>) {
                 DependencyInjector
                     .resolve<FileUtility>(FileUtility::class.java)
                     ?.readLineDelimitedInput("day1/Day1Input.txt")
-                    ?: listOf()
+                    ?: emptyList()
             }
         ),
 
@@ -29,7 +31,7 @@ fun main(args: Array<String>) {
                 DependencyInjector
                     .resolve<FileUtility>(FileUtility::class.java)
                     ?.readLineDelimitedInput("day2/Day2Input.txt")
-                    ?: listOf()
+                    ?: emptyList()
             }
 
         ),
@@ -40,14 +42,34 @@ fun main(args: Array<String>) {
                 DependencyInjector
                     .resolve<FileUtility>(FileUtility::class.java)
                     ?.readLineDelimitedInput("day3/Day3Input.txt")
-                    ?: listOf()
+                    ?: emptyList()
+            }
+        ),
+
+        Pair(
+            "4",
+            DayFour {
+                DependencyInjector
+                    .resolve<FileUtility>(FileUtility::class.java)
+                    ?.readLineDelimitedInput("day4/Day4Input.txt")
+                    ?: emptyList()
+            }
+        ),
+
+        Pair(
+            "5",
+            DayFive {
+                DependencyInjector
+                    .resolve<FileUtility>(FileUtility::class.java)
+                    ?.readLineDelimitedInput("day5/Day5Input.txt")
+                    ?: emptyList()
             }
         )
     )
 
     adventDays.forEach {
         if(it.key in args || args.isEmpty()) {
-            println(it.value.dayNumber)
+            println("--- ${it.value.dayNumber}: ${it.value.dayTitle} ---")
             it.value.partOne()
             it.value.partTwo()
         }

@@ -7,18 +7,10 @@ import com.jamesellerbee.codeadvent2022.utility.logging.Logger
 import com.jamesellerbee.codeadvent2022.utility.logging.LoggingLevel
 
 class DayTwo(inputProvider: () -> List<String>) :
-    AdventDay("Day Two", inputProvider) {
+    AdventDay("Day Two", "Rock Paper Scissors", inputProvider) {
     private val charOffSet = 23
     private val selectionFriendlyNameMap = mutableMapOf<String, String>()
     private val selectionScoreMap = mutableMapOf<String, Int>()
-
-    private val expectedAnswerProvider by lazy {
-        DependencyInjector.resolve<ExpectedAnswerProvider>(ExpectedAnswerProvider::class.java)
-    }
-
-    private val logger by lazy {
-        DependencyInjector.resolve<Logger>(Logger::class.java)
-    }
 
     init {
         // A, X = Rock
@@ -36,62 +28,6 @@ class DayTwo(inputProvider: () -> List<String>) :
         selectionFriendlyNameMap["Z"] = "Scissors"
         selectionScoreMap["Z"] = 3
 
-    }
-
-    fun pickPlay(input: String): Int {
-        val tokens = input.split(" ")
-        val opponentInput = tokens[0]
-        val yourInput = tokens[1]
-
-        var outCome = OutCome.WIN
-        if (yourInput[0].code + 1 == opponentInput[0].code + charOffSet
-            || yourInput[0].code - 2 == opponentInput[0].code + charOffSet
-        ) {
-            outCome = OutCome.LOSE
-        } else if (yourInput[0].code == opponentInput[0].code + charOffSet) {
-            outCome = OutCome.DRAW
-        }
-
-        return outCome.worth + (selectionScoreMap[tokens[1]] ?: 0)
-    }
-
-    fun pickOutcome(input: String): Int {
-        val tokens = input.split(" ")
-
-        val opponentInput = tokens[0]
-
-        val desiredOutcome = OutCome.fromSelection(tokens[1])
-
-        // calculate what you need to play
-        val selection = when (desiredOutcome) {
-            OutCome.WIN ->
-                if (opponentInput[0].code + charOffSet == 90) Char(opponentInput[0].code + charOffSet - 2).toString()
-                else Char(opponentInput[0].code + charOffSet + 1).toString()
-
-            OutCome.LOSE ->
-                if (opponentInput[0].code + charOffSet == 88) Char(opponentInput[0].code + charOffSet + 2).toString()
-                else Char(opponentInput[0].code + charOffSet - 1).toString()
-
-            OutCome.DRAW -> Char(opponentInput[0].code + charOffSet).toString()
-        }
-
-
-        logger?.log(
-            LoggingLevel.DEBUG,
-            "input is ${selectionFriendlyNameMap[tokens[0]]},\ndesired outcome is $desiredOutcome,\nelection is ${selectionFriendlyNameMap[selection]} ($selection)"
-        )
-
-        return desiredOutcome.worth + (selectionScoreMap[selection] ?: 0)
-    }
-
-    fun determineScore(input: List<String>, outComeStrategy: (input: String) -> Int): Int {
-        var totalScore = 0
-
-        input.forEach {
-            totalScore += outComeStrategy.invoke(it)
-        }
-
-        return totalScore
     }
 
     override fun partOne() {
@@ -142,5 +78,60 @@ Good luck!"
         }
 
         printOutput(expected, actual.toString())
+    }
+
+    fun pickPlay(input: String): Int {
+        val tokens = input.split(" ")
+        val opponentInput = tokens[0]
+        val yourInput = tokens[1]
+
+        var outCome = OutCome.WIN
+        if (yourInput[0].code + 1 == opponentInput[0].code + charOffSet
+            || yourInput[0].code - 2 == opponentInput[0].code + charOffSet
+        ) {
+            outCome = OutCome.LOSE
+        } else if (yourInput[0].code == opponentInput[0].code + charOffSet) {
+            outCome = OutCome.DRAW
+        }
+
+        return outCome.worth + (selectionScoreMap[tokens[1]] ?: 0)
+    }
+
+    fun pickOutcome(input: String): Int {
+        val tokens = input.split(" ")
+
+        val opponentInput = tokens[0]
+
+        val desiredOutcome = OutCome.fromSelection(tokens[1])
+
+        // calculate what you need to play
+        val selection = when (desiredOutcome) {
+            OutCome.WIN ->
+                if (opponentInput[0].code + charOffSet == 90) Char(opponentInput[0].code + charOffSet - 2).toString()
+                else Char(opponentInput[0].code + charOffSet + 1).toString()
+
+            OutCome.LOSE ->
+                if (opponentInput[0].code + charOffSet == 88) Char(opponentInput[0].code + charOffSet + 2).toString()
+                else Char(opponentInput[0].code + charOffSet - 1).toString()
+
+            OutCome.DRAW -> Char(opponentInput[0].code + charOffSet).toString()
+        }
+
+        logger?.log(
+            LoggingLevel.DEBUG,
+            "input is ${selectionFriendlyNameMap[tokens[0]]},\ndesired outcome is $desiredOutcome,\nelection is ${selectionFriendlyNameMap[selection]} ($selection)"
+        )
+
+        return desiredOutcome.worth + (selectionScoreMap[selection] ?: 0)
+    }
+
+    fun determineScore(input: List<String>, outComeStrategy: (input: String) -> Int): Int {
+        var totalScore = 0
+
+        input.forEach {
+            totalScore += outComeStrategy.invoke(it)
+        }
+
+        return totalScore
     }
 }

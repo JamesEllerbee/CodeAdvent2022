@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class DayThreeTest {
     private val fileUtility = FileUtility()
     private val dayThree = DayThree {
-        listOf()
+        emptyList()
     }
 
     @Test
