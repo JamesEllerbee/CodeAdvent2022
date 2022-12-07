@@ -8,16 +8,19 @@ import java.util.Stack
 class DayFive(inputProvider: () -> List<String>) : AdventDay("Day Five", "Supply Stacks", inputProvider) {
     override fun partOne() {
         printOutput(
-            expectedAnswerProvider?.getExpectedAnswer("Day Fix", "Part One") ?: "UNKNOWN",
-            getCratesAtTopOfEachStack(inputProvider.invoke())
+            expectedAnswerProvider?.getExpectedAnswer("Day Five", "Part One") ?: "UNKNOWN",
+            getCratesAtTopOfEachStack(inputProvider.invoke(), CraneType.SINGLE)
         )
     }
 
     override fun partTwo() {
-        TODO("Not yet implemented")
+        printOutput(
+            expectedAnswerProvider?.getExpectedAnswer("Day Five", "Part Two") ?: "UNKNOWN",
+            getCratesAtTopOfEachStack(inputProvider.invoke(), CraneType.MULTIPLE)
+        )
     }
 
-    fun getCratesAtTopOfEachStack(input: List<String>): String {
+    fun getCratesAtTopOfEachStack(input: List<String>, craneType: CraneType): String {
         // initialize stacks
         val stacks = createStacks(determineNumStacks(input))
         input.filter { it.contains("[") }.forEach {
@@ -46,8 +49,21 @@ class DayFive(inputProvider: () -> List<String>) : AdventDay("Day Five", "Supply
                 LoggingLevel.DEBUG,
                 "amountToMove = $amountToMove, source = $source, destination = $destination"
             )
+
+            val tempStack = Stack<String>()
+
             for (i in 0 until amountToMove) {
-                stacks[destination - 1].push(stacks[source - 1].pop())
+                when (craneType) {
+                    CraneType.SINGLE -> stacks[destination - 1].push(stacks[source - 1].pop())
+                    CraneType.MULTIPLE -> {
+                        tempStack.push(stacks[source - 1].pop())
+                    }
+                }
+
+            }
+
+            while (tempStack.isNotEmpty()) {
+                stacks[destination - 1].push(tempStack.pop())
             }
 
             logStacksContents(stacks)
@@ -93,7 +109,7 @@ class DayFive(inputProvider: () -> List<String>) : AdventDay("Day Five", "Supply
                 stacks[numSpaces / 4].push(line[i + 1].toString())
             }
 
-            numSpaces += 1
+            numSpaces++
         }
     }
 

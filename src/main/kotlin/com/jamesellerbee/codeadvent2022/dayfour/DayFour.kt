@@ -41,7 +41,7 @@ class DayFour(inputProvider: () -> List<String>) : AdventDay("Day Four", "Camp C
             val rangeB = tokens[1]
 
             if (isRangeOverlapping(rangeA, rangeB, overlapMode)) {
-                sum += 1
+                sum++
             }
         }
 

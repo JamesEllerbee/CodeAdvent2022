@@ -21,10 +21,25 @@ class DayFiveTest {
         val dayFive = DayFive { emptyList() }
 
         // When calculating which crate will end up on the top of each stack
-        val actual = dayFive.getCratesAtTopOfEachStack(exampleInput)
+        val actual = dayFive.getCratesAtTopOfEachStack(exampleInput, CraneType.SINGLE)
 
         // Then the output matches the expected
         assertEquals("CMZ", actual)
+    }
+
+    @Test
+    fun testExampleInputPartTwo() {
+        // Given example input
+        val exampleInput = fileUtility.readLineDelimitedInput(exampleInputFile)
+
+        // Given advent day five
+        val dayFive = DayFive { emptyList() }
+
+        // When calculating which crate will end up on the top of each stack
+        val actual = dayFive.getCratesAtTopOfEachStack(exampleInput, CraneType.MULTIPLE)
+
+        // Then the output matches the expected
+        assertEquals("MCD", actual)
     }
 
 }
