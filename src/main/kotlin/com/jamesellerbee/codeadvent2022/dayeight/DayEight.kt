@@ -1,14 +1,19 @@
 package com.jamesellerbee.codeadvent2022.dayeight
 
 import com.jamesellerbee.codeadvent2022.AdventDay
+import com.jamesellerbee.codeadvent2022.utility.logging.LoggingLevel
+import java.lang.StringBuilder
 
 class DayEight(inputProvider: () -> List<String>) : AdventDay("Day Eight", "Treetop Tree House", inputProvider) {
     override fun partOne() {
-        TODO("Not yet implemented")
+        printOutput(
+            expectedAnswerProvider?.getExpectedAnswer("Day Eight", "Part One") ?: "UKNOWN",
+            findNumTreesVisible(inputProvider.invoke()).toString()
+        )
     }
 
     override fun partTwo() {
-        TODO("Not yet implemented")
+        println("Not yet implemented")
     }
 
     fun findNumTreesVisible(input: List<String>): Int {
@@ -18,14 +23,27 @@ class DayEight(inputProvider: () -> List<String>) : AdventDay("Day Eight", "Tree
 
         gridCells.forEach {
             if (it.up == null || it.down == null || it.left == null || it.right == null) {
-                println(" edge ${it.tree?.height} (${it.row}, ${it.column})")
+                logger?.log(LoggingLevel.DEBUG, "edge ${it.tree?.height} (${it.row}, ${it.column})")
                 numTreesVisible++
-            } else if (compareToEdge(it, Direction.UP)
-                && compareToEdge(it, Direction.DOWN)
-                && compareToEdge(it, Direction.LEFT)
-                && compareToEdge(it, Direction.RIGHT)
+            } else if (compareTo(it.tree?.height!!, it, Direction.UP)
+                || compareTo(it.tree?.height!!, it, Direction.DOWN)
+                || compareTo(it.tree?.height!!, it, Direction.LEFT)
+                || compareTo(it.tree?.height!!, it, Direction.RIGHT)
             ) {
-                println("interior ${it.tree?.height} (${it.row}, ${it.column})")
+                if (logger?.isLevelEnabled(LoggingLevel.DEBUG) == true) {
+                    val directionVisible = StringBuilder()
+
+                    if (compareTo(it.tree?.height!!, it, Direction.UP)) directionVisible.append(" top")
+                    if (compareTo(it.tree?.height!!, it, Direction.DOWN)) directionVisible.append(" bottom")
+                    if (compareTo(it.tree?.height!!, it, Direction.LEFT)) directionVisible.append(" left")
+                    if (compareTo(it.tree?.height!!, it, Direction.RIGHT)) directionVisible.append(" right")
+
+                    logger?.log(
+                        LoggingLevel.DEBUG,
+                        "interior ${it.tree?.height} (${it.row}, ${it.column}) visible from$directionVisible"
+                    )
+                }
+
                 numTreesVisible++
             }
         }
@@ -73,14 +91,16 @@ class DayEight(inputProvider: () -> List<String>) : AdventDay("Day Eight", "Tree
             }
         }
 
-        gridCells.forEach {
-            println(it.toString())
+        if(logger?.isLevelEnabled(LoggingLevel.DEBUG) == true) {
+            gridCells.forEach {
+                logger?.log(LoggingLevel.DEBUG, it.toString())
+            }
         }
 
         return gridCells
     }
 
-    private fun compareToEdge(cell: GridCell, direction: Direction): Boolean {
+    private fun compareTo(height: Int, cell: GridCell, direction: Direction): Boolean {
         val neighbor = when (direction) {
             Direction.UP -> cell.up
             Direction.DOWN -> cell.down
@@ -88,6 +108,7 @@ class DayEight(inputProvider: () -> List<String>) : AdventDay("Day Eight", "Tree
             Direction.RIGHT -> cell.right
         } ?: return true
 
-        return cell.tree?.height!! < neighbor.tree?.height!! && compareToEdge(neighbor, direction)
+        val taller = height > neighbor.tree?.height!!
+        return taller && compareTo(height, neighbor, direction)
     }
 }

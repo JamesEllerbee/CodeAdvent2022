@@ -1,5 +1,6 @@
 package com.jamesellerbee.codeadvent2022
 
+import com.jamesellerbee.codeadvent2022.dayeight.DayEight
 import com.jamesellerbee.codeadvent2022.dayfive.DayFive
 import com.jamesellerbee.codeadvent2022.dayfour.DayFour
 import com.jamesellerbee.codeadvent2022.dayone.DayOne
@@ -81,6 +82,16 @@ class AdventDayMap {
                     DependencyInjector
                         .resolve<FileUtility>(FileUtility::class.java)
                         ?.readLineDelimitedInput("day7/Day7Input.txt")
+                        ?: emptyList()
+                }
+            ),
+
+            Pair(
+                "8",
+                DayEight {
+                    DependencyInjector
+                        .resolve<FileUtility>(FileUtility::class.java)
+                        ?.readLineDelimitedInput("day8/Day8Input.txt")
                         ?: emptyList()
                 }
             )
