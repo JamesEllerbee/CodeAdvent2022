@@ -22,4 +22,19 @@ class DayEightTest {
         // Then it matches the expected
         assertEquals(21, actual)
     }
+
+    @Test
+    fun testExampleInputPartTwo() {
+        // Given example input
+        val exampleInput = fileUtility.readLineDelimitedInput(exampleFilePath)
+
+        // Given day eight
+        val dayEight = DayEight { listOf() }
+
+        // When determining number of trees visible from outside the grid
+        val actual = dayEight.findScenicScore(exampleInput)
+
+        // Then it matches the expected
+        assertEquals(8, actual)
+    }
 }

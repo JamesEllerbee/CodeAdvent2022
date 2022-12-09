@@ -61,7 +61,8 @@ class ExpectedAnswerProvider {
         Pair(
             "Day Eight",
             mapOf(
-                Pair("Part One", "1713")
+                Pair("Part One", "1713"),
+                Pair("Part Two", "268464")
             )
         )
     )
